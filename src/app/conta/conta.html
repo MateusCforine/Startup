@@ -1,0 +1,32 @@
+<div class="layout">
+  <app-menu></app-menu>
+  <main class="main">
+    <div class="card" style="padding:16px;max-width:860px">
+      <header class="acc-h">
+        <img [src]="usuario.foto" class="avatar-lg" alt="" onerror="this.onerror=null;this.src='/assets/prints/avatar.svg'">
+        <div class="grow">
+          <nav class="tabs">
+            <a class="active">Minha conta</a>
+            <a>Adicionar conta</a>
+          </nav>
+        </div>
+        <button class="chip">Sair</button>
+      </header>
+
+      <section class="acc-body">
+        <div class="meta">
+          <b>{{ usuario.amigos }}</b> Amigos
+          <b>{{ usuario.posts }}</b> Sem posts ainda
+          <a class="chip" style="margin-left:auto">Upload ⬆</a>
+        </div>
+        <h2 style="margin-top:6px">{{ usuario.nome }}</h2>
+        <p class="muted">{{ usuario.status }}</p>
+
+        <div class="actions">
+          <button class="chip">✏️ Editar perfil</button>
+          <button class="chip">📷 Trocar foto de perfil</button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>

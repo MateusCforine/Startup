@@ -1,1 +1,73 @@
-/* You can add global styles to this file, and also import other style files */
+/* ===== Reset rápido ===== */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; background:#f6f6f6; color:#111; }
+
+/* ===== Tokens de tema (padrão dos prints) ===== */
+:root{
+  --red-1:#ff4d4d;
+  --red-2:#c91717;
+  --red:#e53935;              /* botões */
+  --red-dark:#c62828;
+  --text:#111;                /* textos no conteúdo */
+  --muted:#666;
+  --border:#e6e6e6;           /* linhas e contornos claros */
+  --chip:#eeeeee;             /* pills cinza */
+  --surface:#ffffff;          /* cartões/branco */
+  --radius-lg:18px;
+  --radius-md:14px;
+  --radius-sm:12px;
+  --shadow: 0 2px 10px rgba(0,0,0,.06);
+}
+
+/* ===== Layout base com menu fixo ===== */
+.layout{display:flex;min-height:100vh;}
+.main{
+  flex:1; padding:22px; margin-left:260px; /* largura do menu fixo */
+  color:var(--text);
+}
+h1,h2,h3{margin:0 0 10px}
+p,small,span,label{color:var(--text)}
+
+/* Inputs “pill” cinza como nos prints */
+input[type="text"], input[type="email"], input[type="password"], textarea, select{
+  width:100%; border:1px solid var(--border); background:var(--chip);
+  color:var(--text); border-radius: 999px; padding:12px 16px; outline:none;
+}
+textarea{border-radius:var(--radius-md); background:#f0f0f0}
+
+/* Botão vermelho */
+.btn, button.primary, .btn-publicar{
+  background:var(--red); color:#fff; border:0; border-radius:999px; padding:10px 18px; font-weight:600; cursor:pointer;
+}
+.btn:hover, button.primary:hover, .btn-publicar:hover{ background:var(--red-dark); }
+
+/* Cartões brancos */
+.card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); box-shadow:var(--shadow);
+}
+
+/* Chips cinza #eee */
+.chip{
+  display:inline-flex; align-items:center; gap:6px;
+  background:var(--chip); border:1px solid var(--border); color:var(--text);
+  border-radius:999px; padding:8px 12px; font-weight:600;
+}
+
+/* Barra de busca arredondada */
+.searchbar{
+  display:flex; align-items:center; gap:10px; background:#fff; border:1px solid #dcdcdc;
+  border-radius:999px; padding:10px 14px; box-shadow:var(--shadow);
+}
+.searchbar input{ background:transparent; border:0; padding:0; }
+
+/* Grade usada no feed (post grande + people) */
+.grid{display:grid; grid-template-columns: minmax(0,1fr) 320px; gap:16px;}
+@media (max-width: 1024px){ .grid{grid-template-columns:1fr} }
+
+/* Carrossel simples horizontal (sugestões/stories) */
+.row-scroll{display:flex; gap:14px; overflow:auto; padding-bottom:4px; scroll-snap-type:x mandatory}
+.row-scroll>*{scroll-snap-align:start}
+
+/* Espaçamentos comuns */
+.mt-16{margin-top:16px} .mb-16{margin-bottom:16px}

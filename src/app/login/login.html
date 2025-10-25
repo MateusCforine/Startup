@@ -1,0 +1,41 @@
+<div class="page">
+  <header class="topbar">
+    <div class="links">
+      <span>Português(BR) ▾</span>
+      <a>Sobre nós</a>
+      <a>Termos e condições</a>
+      <a>Política de privacidade</a>
+    </div>
+  </header>
+
+  <main class="content">
+    <section class="hero-text hero-stack">
+      <img class="hero-logo" src="/gusto.jpg" alt="Gusto" />
+      <div class="hero-copy">
+        <h1 [innerHTML]="titulo.replace('\n','<br>')"></h1>
+        <p>{{ subtitulo }}</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <form class="form" (submit)="$event.preventDefault()">
+        <label class="field">
+          <input type="email" placeholder="E-mail:" [(ngModel)]="email" name="email"/>
+        </label>
+
+        <label class="field">
+          <input [type]="mostrarSenha ? 'text' : 'password'" placeholder="Senha:" [(ngModel)]="senha" name="senha"/>
+          <button class="eye" type="button" (click)="mostrarSenha = !mostrarSenha" aria-label="mostrar senha">👁</button>
+        </label>
+
+        <div class="aux"><a class="link">Esqueci minha senha</a></div>
+
+        @if (!valido) { <p class="hint">Preencha e-mail válido e senha (mín. 4).</p> }
+
+  <button class="primary" type="button" [disabled]="!valido" (click)="entrar()">Entrar</button>
+        <div class="or">Ou</div>
+  <button class="secondary" type="button" (click)="goCadastro()">Criar nova conta</button>
+      </form>
+    </section>
+  </main>
+</div>

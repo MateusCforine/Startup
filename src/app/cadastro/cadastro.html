@@ -1,0 +1,32 @@
+<div class="page">
+  <header class="topbar">
+    <div class="links">
+      <span>Português(BR) ▾</span>
+      <a>Sobre nós</a>
+      <a>Termos e condições</a>
+      <a>Política de privacidade</a>
+    </div>
+  </header>
+
+  <main class="content">
+    <section class="card">
+      <h1>Criar nova conta</h1>
+
+  <form class="form" (submit)="$event.preventDefault(); criarConta()">
+        <label class="field"><input type="email" placeholder="E-mail:" [(ngModel)]="email" name="email"/></label>
+        <label class="field"><input type="tel" placeholder="Número de telefone:" [(ngModel)]="telefone" name="tel"/></label>
+        <label class="field">
+          <input [type]="mostrar1?'text':'password'" placeholder="Senha:" [(ngModel)]="senha" name="senha"/>
+          <button class="eye" type="button" (click)="mostrar1=!mostrar1">👁</button>
+        </label>
+        <label class="field">
+          <input [type]="mostrar2?'text':'password'" placeholder="Confirma sua senha:" [(ngModel)]="confirma" name="conf"/>
+          <button class="eye" type="button" (click)="mostrar2=!mostrar2">👁</button>
+        </label>
+
+        @if (!ok) { <p class="hint">Verifique e-mail/telefone e se as senhas coincidem.</p> }
+        <button class="primary" type="submit" [disabled]="!ok">Criar conta</button>
+      </form>
+    </section>
+  </main>
+</div>

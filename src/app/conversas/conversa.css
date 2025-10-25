@@ -1,0 +1,7 @@
+.chat-list{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.chat-item{display:flex;align-items:center;gap:12px;padding:10px}
+.avatar{width:46px;height:46px;border-radius:50%;object-fit:cover}
+.txt{display:flex;flex-direction:column}
+.muted{color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--red);margin-left:6px}
+time{margin-left:auto;color:var(--muted)}

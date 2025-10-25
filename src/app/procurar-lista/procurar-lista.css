@@ -1,0 +1,12 @@
+.main{padding:16px}
+.busca{display:flex;align-items:center;gap:8px;padding:10px 14px;border:1px solid #ddd;border-radius:20px;max-width:760px}
+.busca input{flex:1;border:0;outline:0}
+.kebab{background:#eee;border:0;border-radius:10px;padding:6px 10px}
+.lista{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:14px}
+.item{display:flex;align-items:center;gap:12px;border:1px solid #eee;border-radius:14px;padding:12px;background:#fff}
+.avatar{width:52px;height:52px;border-radius:50%;object-fit:cover}
+.txt{display:flex;align-items:center;gap:6px}
+.v{font-size:12px}
+.acoes{margin-left:auto;display:flex;gap:8px;align-items:center}
+.acoes button{background:#efefef;border:0;border-radius:12px;padding:8px 12px}
+.ver-mais{text-align:center;color:#444;margin-top:12px}

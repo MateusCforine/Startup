@@ -1,0 +1,27 @@
+<div class="layout">
+  <app-menu></app-menu>
+  <main class="main">
+    <form class="busca" (submit)="$event.preventDefault()">
+      <span class="icon">🔍</span>
+      <input [(ngModel)]="termo" name="q" placeholder='Procurar' />
+      <button class="kebab">⋮</button>
+    </form>
+
+    <ul class="lista">
+      @for (r of resultados; track $index) {
+        <li class="item">
+          <img class="avatar" [src]="r.img" alt="">
+          <div class="txt">
+            <strong>{{ r.nome }}</strong> @if(r.verificado){ <span class="v">✔</span> }
+          </div>
+          <div class="acoes">
+            @for (a of r.acoes; track $index) { <button>{{ a }}</button> }
+            <button class="kebab">⋮</button>
+          </div>
+        </li>
+      }
+    </ul>
+
+    <div class="ver-mais">👤 Ver mais</div>
+  </main>
+</div>

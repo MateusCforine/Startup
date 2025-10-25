@@ -1,0 +1,19 @@
+<div class="layout">
+  <app-menu></app-menu>
+  <main class="main">
+    <h2>Notificações</h2>
+    <ul class="notif">
+      @for (n of itens; track $index) {
+        <li class="card row">
+          <img [src]="n.img" class="avatar" alt="" onerror="this.onerror=null;this.src='/assets/prints/avatar.svg'">
+          <div class="col">
+            <strong>{{ n.texto }}</strong>
+            <small class="muted">{{ n.tempo }}</small>
+          </div>
+          @if (n.live) { <span class="live">Live</span> }
+          @if (n.acao) { <button class="chip">{{ n.acao }}</button> }
+        </li>
+      }
+    </ul>
+  </main>
+</div>

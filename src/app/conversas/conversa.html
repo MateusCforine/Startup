@@ -1,0 +1,21 @@
+<div class="layout">
+  <app-menu></app-menu>
+  <main class="main">
+    <h2>Chats</h2>
+    <ul class="chat-list">
+      @for (c of chats; track $index) {
+        <li class="card chat-item">
+          <img [src]="c.img" alt="" class="avatar" onerror="this.onerror=null;this.src='/assets/prints/avatar.svg'">
+          <div class="txt">
+            <strong>{{ c.nome }}</strong>
+            <span class="muted">{{ c.resumo }}</span>
+          </div>
+          @if (c.nova) {
+            <span class="dot"></span>
+          }
+          <time class="muted">{{ c.tempo }}</time>
+        </li>
+      }
+    </ul>
+  </main>
+</div>

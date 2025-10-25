@@ -1,0 +1,30 @@
+<div class="layout">
+  <app-menu></app-menu>
+  <main class="main">
+    <div class="searchbar">
+      <span>🔍</span>
+      <input [(ngModel)]="termo" name="q" placeholder='Procurar'>
+    </div>
+
+    <h3 class="mt-16">Descubra</h3>
+    <div class="chips row-scroll">
+      @for (t of tags; track $index) { <span class="chip">{{ t }}</span> }
+      <a class="chip" routerLink="/procurar/lista">Ver tudo</a>
+    </div>
+
+    <div class="mt-16">
+      <div class="title-row" style="display:flex;align-items:center">
+        <h3>Sugestões</h3><a style="margin-left:auto">More</a>
+      </div>
+      <div class="row-scroll">
+        @for (s of sugestoes; track $index) {
+          <article class="s-card">
+            <img [src]="s.img" alt="">
+            <div class="meta">{{ s.meta }}</div>
+            <b>{{ s.titulo }} ✔</b>
+          </article>
+        }
+      </div>
+    </div>
+  </main>
+</div>

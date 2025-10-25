@@ -1,0 +1,28 @@
+<div class="layout">
+  <app-menu></app-menu>
+  <main class="main">
+    <header class="topo">
+      <img class="avatar" [src]="contato.img" alt="">
+      <div class="who">
+        <strong>{{ contato.nome }}</strong>
+        <small>{{ contato.visto }}</small>
+      </div>
+      <div class="acoes">
+        <button>📞</button>
+        <button>🎥</button>
+        <button>⋮</button>
+      </div>
+    </header>
+
+    <section class="area">
+      @for (m of msgs; track $index) {
+        <p class="msg" [class.eu]="m.de==='eu'">{{ m.txt }}</p>
+      }
+    </section>
+
+    <form class="composer" (submit)="$event.preventDefault(); enviar()">
+      <input [(ngModel)]="campo" name="m" placeholder="Escrever uma mensagem...">
+      <div class="icones"><button type="button">📎</button><button type="button">🎤</button></div>
+    </form>
+  </main>
+</div>

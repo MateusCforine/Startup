@@ -1,0 +1,19 @@
+<div class="layout">
+  <app-menu></app-menu>
+  <main class="main">
+    <div class="card" style="padding:16px;max-width:600px">
+      <h2>Settings</h2>
+      <label class="row">
+        <input type="checkbox" [(ngModel)]="temaEscuro"> Tema escuro
+      </label>
+      <label class="row">
+        Privacidade
+        <select [(ngModel)]="privacidade">
+          <option>pública</option>
+          <option>apenas amigos</option>
+          <option>privado</option>
+        </select>
+      </label>
+    </div>
+  </main>
+</div>

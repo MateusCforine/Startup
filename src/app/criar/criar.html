@@ -1,0 +1,26 @@
+<div class="layout">
+  <app-menu></app-menu>
+  <main class="main">
+    <div class="card" style="max-width:720px;padding:16px;">
+      <h2 style="margin:0 0 6px">Criar nova publicação</h2>
+      <p style="color:var(--muted);margin:0 0 12px">Compartilhe sua experiência gastronômica</p>
+
+      <form (ngSubmit)="publicar()" class="criar-form">
+        <textarea [(ngModel)]="descricao" name="descricao" placeholder="Escreva algo..." required></textarea>
+
+        <label class="upload btn" style="display:inline-block;text-align:center">
+          <input type="file" (change)="onFile($event)" accept="image/*" hidden>
+          Escolher imagem
+        </label>
+
+        @if (imagem) {
+          <div class="preview" style="margin-top:8px">
+            <img [src]="imagem" alt="Prévia da imagem" style="width:100%;border-radius:12px;border:1px solid var(--border)">
+          </div>
+        }
+
+        <button type="submit" class="btn-publicar" style="margin-top:10px">Publicar</button>
+      </form>
+    </div>
+  </main>
+</div>
