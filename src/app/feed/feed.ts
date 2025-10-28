@@ -20,14 +20,14 @@ type Post = {
 @Component({
   selector: 'app-feed',
   standalone: true,
-  imports: [CommonModule, FormsModule, MenuComponent, LikesPipe], // ✅ removido NgIf e NgFor
+  imports: [CommonModule, FormsModule, MenuComponent, LikesPipe],
   templateUrl: './feed.html',
   styleUrls: ['./feed.css']
 })
 export class FeedComponent {
-  stories = Array.from({ length: 8 }).map((_, i) => `story-${i + 1}`);
+  avatar = 'assets/prints/avatar.png';
 
-  brands = ['brand1.png', 'brand2.png', 'brand3.png', 'brand4.png', 'brand5.png'];
+  stories = Array.from({ length: 8 });
 
   posts: Post[] = [
     {
@@ -44,7 +44,7 @@ export class FeedComponent {
       autor: 'Corbucci',
       tag: '#desafio',
       tempo: '3 h',
-      img: 'corbucci.jpg',
+      img: 'Corbucci.jpeg', // nome exato do arquivo
       like: false,
       likes: 20100,
       comments: 92
@@ -53,24 +53,39 @@ export class FeedComponent {
       autor: 'Masterchef',
       tag: '#tv',
       tempo: 'ontem',
-      img: 'masterchef.jpg',
+      img: 'masterchef.png', // nome exato do arquivo
       like: false,
       likes: 20100,
       comments: 47
     }
   ];
 
-  toggleLikeAndComment(p: Post) {
+  imgUrl(path?: string | null): string {
+    if (!path) return 'assets/prints/gusto.jpg';
+    if (/^https?:\/\//i.test(path)) return path;
+    if (path.startsWith('assets/')) return path;
+    return `assets/prints/${path}`;
+  }
+
+  useFallback(ev: Event, file = 'gusto.jpg') {
+    const img = ev.target as HTMLImageElement;
+    img.onerror = null;
+    img.src = `assets/prints/${file}`;
+  }
+
+  toggleLike(p: Post) {
     p.like = !p.like;
     p.likes += p.like ? 1 : -1;
-    p.showCommentBox = true;
+  }
+
+  toggleComments(p: Post) {
+    p.showCommentBox = !p.showCommentBox;
   }
 
   addComment(p: Post) {
     const txt = (p.newComment || '').trim();
     if (!txt) return;
-    if (!p.commentsList) p.commentsList = [];
-    p.commentsList.push(txt);
+    (p.commentsList ??= []).push(txt);
     p.comments += 1;
     p.newComment = '';
   }

@@ -1,33 +1,149 @@
 /* stories (círculos + “Bombando hoje”) */
-.stories{display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--border);
-  border-radius:999px; padding:8px 12px; box-shadow:var(--shadow)}
-.stories .circle{width:42px; height:42px; border-radius:50%; object-fit:cover}
-.stories .add{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:#fff}
-.stories .tag{margin-left:auto; font-weight:600; color:#e53935}
+.stories {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 12px;
+  box-shadow: var(--shadow);
+}
+.stories .circle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.stories .add {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: #fff;
+}
+.stories .tag {
+  margin-left: auto;
+  font-weight: 600;
+  color: #e53935;
+}
 
 /* destaque */
-.post{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden}
-.post.big .p-head{padding:12px 12px 0}
-.p-head{display:flex; align-items:center; gap:8px; padding:10px 12px}
-.p-head .circle{width:36px; height:36px; border-radius:50%}
-.img-wrap{overflow:hidden}
-.post-img{width:100%; display:block; border-radius:0}
-.p-foot{display:flex; align-items:center; gap:12px; padding:10px 12px; border-top:1px solid var(--border)}
-.comments{padding:0 12px 12px}
-.comment-box{display:flex; gap:8px; margin-top:8px}
-.comment-box input{flex:1}
+.post {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.post.big .p-head {
+  padding: 12px 12px 0;
+}
+.p-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+}
+.p-head .circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+/* 📸 Imagem do post principal (Outback) — tamanho ajustado ao padrão dos posts */
+.post.big .img-wrap {
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  display: flex;
+  justify-content: center;
+  background: transparent;      /* remove o fundo preto */
+}
+
+.post.big .post-img {
+  width: 100%;
+  max-width: 680px;             /* tamanho equilibrado como um post normal */
+  aspect-ratio: 16 / 9;         /* mantém proporção padrão */
+  object-fit: cover;            /* corta sem distorcer */
+  border-radius: var(--radius-lg);
+  display: block;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  margin: 0 auto;               /* centraliza no container */
+}
+
+
+
+/* imagens de outros posts */
+.img-wrap {
+  overflow: hidden;
+}
+.post-img {
+  width: 100%;
+  display: block;
+  border-radius: 0;
+}
+
+/* rodapé e comentários */
+.p-foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--border);
+}
+.comments {
+  padding: 0 12px 12px;
+}
+.comment-box {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.comment-box input {
+  flex: 1;
+}
 
 /* People (cards à direita) */
-.people{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:12px}
-.people h3{margin:4px 0 10px}
-.people .cards{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
-.people .card{display:flex; align-items:center; justify-content:space-between; padding:8px; border:1px solid var(--border); border-radius:12px}
-.people img{width:40px;height:40px;border-radius:50%}
-.people button{background:var(--chip); border:1px solid var(--border); border-radius:999px; padding:6px 10px}
+.people {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 12px;
+}
+.people h3 {
+  margin: 4px 0 10px;
+}
+.people .cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.people .card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.people img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.people button {
+  background: var(--chip);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 10px;
+}
 
-/* brands (logos) */
-.brands{display:flex; gap:16px; margin-top:14px}
-.brands img{height:42px; width:auto; background:#fff; border:1px solid var(--border); border-radius:12px; padding:6px}
 
 /* posts da coluna de baixo */
-.posts{display:grid; grid-template-columns:1fr; gap:16px; margin-top:16px}
+.posts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
