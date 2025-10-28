@@ -22,13 +22,14 @@ type Post = {
   standalone: true,
   imports: [CommonModule, FormsModule, MenuComponent, LikesPipe],
   templateUrl: './feed.html',
-  styleUrls: ['./feed.css']
+  styleUrls: ['./feed.css'],
 })
 export class FeedComponent {
   avatar = 'assets/prints/avatar.png';
 
   stories = Array.from({ length: 8 });
 
+  // 🔸 Três posts com o MESMO padrão
   posts: Post[] = [
     {
       autor: 'Outback',
@@ -38,26 +39,26 @@ export class FeedComponent {
       like: false,
       likes: 53200,
       comments: 168,
-      commentsList: ['Bora!', 'Quero muito provar.']
+      commentsList: ['Bora!', 'Quero muito provar.'],
     },
     {
       autor: 'Corbucci',
       tag: '#desafio',
       tempo: '3 h',
-      img: 'Corbucci.jpeg', // nome exato do arquivo
+      img: 'Corbucci.jpeg',
       like: false,
       likes: 20100,
-      comments: 92
+      comments: 92,
     },
     {
       autor: 'Masterchef',
       tag: '#tv',
       tempo: 'ontem',
-      img: 'masterchef.png', // nome exato do arquivo
+      img: 'masterchef.png',
       like: false,
       likes: 20100,
-      comments: 47
-    }
+      comments: 47,
+    },
   ];
 
   imgUrl(path?: string | null): string {

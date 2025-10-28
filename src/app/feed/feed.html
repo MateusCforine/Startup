@@ -27,7 +27,7 @@
               <img class="post-img"
                    loading="lazy"
                    [src]="posts[0].img && posts[0].img.startsWith('/') ? posts[0].img : ('/assets/prints/' + posts[0].img)"
-                   onerror="this.onerror=null;this.src='/assets/prints/Outback.jpeg'"
+                   onerror="this.onerror=null;this.src='Outback.jpeg'"
                    alt="post"/>
             </div>
 
@@ -99,7 +99,7 @@
             <div class="img-wrap">
               <img class="post-img"
                    loading="lazy"
-                   [src]="p.img && p.img.startsWith('/') ? p.img : ('/assets/prints/' + p.img)" 
+                   [src]="p.img && p.img.startsWith('/') ? p.img : ('/assets/prints/' + p.img)"
                    onerror="this.onerror=null;this.src='/assets/prints/gusto.jpg'"
                    alt="post"/>
             </div>
