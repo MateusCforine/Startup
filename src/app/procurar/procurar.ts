@@ -14,9 +14,9 @@ export class ProcurarComponent {
   tags = ['#Japa', '#receita', '#comida', '#fitness', '#carne', '#receitafacil', '#viral', '#lanche', '#tbt'];
 
   sugestoes = [
-    { titulo:'Outback', img:'/assets/prints/outback.jpg', meta:'53.2K' },
-    { titulo:'Corbucci', img:'/assets/prints/corbucci.jpg', meta:'20.1K', play:true },
-    { titulo:'Masterchef', img:'/assets/prints/masterchef.jpg', meta:'20.1K' },
+    { titulo:'Outback', img:'Outback.jpeg', meta:'53.2K' },
+    { titulo:'Corbucci', img:'Corbucci.jpeg', meta:'20.1K', play:true },
+    { titulo:'Masterchef', img:'masterchef.png', meta:'20.1K' },
   ];
 
   pesquisar(){ /* hook para filtrar/conectar serviço */ }

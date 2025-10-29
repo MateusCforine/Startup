@@ -1,26 +1,67 @@
 <div class="layout">
   <app-menu></app-menu>
-  <main class="main">
-    <div class="card" style="max-width:720px;padding:16px;">
-      <h2 style="margin:0 0 6px">Criar nova publicação</h2>
-      <p style="color:var(--muted);margin:0 0 12px">Compartilhe sua experiência gastronômica</p>
 
-      <form (ngSubmit)="publicar()" class="criar-form">
-        <textarea [(ngModel)]="descricao" name="descricao" placeholder="Escreva algo..." required></textarea>
+  <main class="main criar-main">
+    <header class="criar-head">
+      <h2>Criar publicação</h2>
+      <p class="muted">Compartilhe sua experiência gastronômica com o Gusto.</p>
+    </header>
 
-        <label class="upload btn" style="display:inline-block;text-align:center">
-          <input type="file" (change)="onFile($event)" accept="image/*" hidden>
-          Escolher imagem
-        </label>
-
-        @if (imagem) {
-          <div class="preview" style="margin-top:8px">
-            <img [src]="imagem" alt="Prévia da imagem" style="width:100%;border-radius:12px;border:1px solid var(--border)">
-          </div>
-        }
-
-        <button type="submit" class="btn-publicar" style="margin-top:10px">Publicar</button>
-      </form>
+    <!-- Seletor foto | vídeo -->
+    <div class="segmented">
+      <button class="seg-btn" [class.active]="tipo==='foto'" (click)="trocarTipo('foto')">Foto</button>
+      <button class="seg-btn" [class.active]="tipo==='video'" (click)="trocarTipo('video')">Vídeo</button>
     </div>
+
+    <form class="criar-form" (ngSubmit)="publicar()">
+      <!-- Descrição -->
+      <label class="label">Descrição</label>
+      <textarea
+        [(ngModel)]="descricao"
+        name="descricao"
+        rows="3"
+        placeholder="Escreva uma legenda..."
+        required
+      ></textarea>
+
+      <!-- Uploader -->
+      <label class="label">Midia ({{ tipo==='foto' ? 'imagem' : 'vídeo' }})</label>
+
+      <div class="uploader"
+           (dragover)="onDragOver($event)"
+           (dragleave)="onDragLeave()"
+           (drop)="onDrop($event)"
+           [class.dragging]="isDragging">
+
+        <input type="file" [accept]="accept" (change)="onFile($event)" hidden #fileInput>
+        <button type="button" class="btn-ghost" (click)="fileInput.click()">
+          Escolher arquivo
+        </button>
+        <span class="muted">ou arraste e solte aqui</span>
+      </div>
+
+      <!-- Pré-visualização -->
+      @if (previewUrl && tipo === 'foto') {
+        <div class="preview">
+          <img [src]="previewUrl" alt="Prévia da imagem" class="preview-img">
+          <button type="button" class="btn-link danger" (click)="removerMidia()">Remover</button>
+        </div>
+      }
+      @if (previewUrl && tipo === 'video') {
+        <div class="preview">
+          <video [src]="previewUrl" class="preview-video" controls playsinline></video>
+          <button type="button" class="btn-link danger" (click)="removerMidia()">Remover</button>
+        </div>
+      }
+
+      <!-- Ações -->
+      <div class="actions">
+        <button type="button" class="btn ghost" (click)="limpar()">Cancelar</button>
+        <button type="submit" class="btn primary"
+                [disabled]="!descricao?.trim() || !previewUrl">
+          Publicar
+        </button>
+      </div>
+    </form>
   </main>
 </div>

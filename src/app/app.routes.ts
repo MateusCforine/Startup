@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login';
 import { CadastroComponent } from './cadastro/cadastro';
 import { FeedComponent } from './feed/feed';
-
 import { ProcurarComponent } from './procurar/procurar';
 import { ProcurarListaComponent } from './procurar-lista/procurar-lista';
 import { ConversasComponent } from './conversas/conversa';
@@ -11,10 +10,12 @@ import { NotificacoesComponent } from './notificacoes/notificacoes';
 import { ContaComponent } from './conta/conta';
 import { ConfigComponent } from './config/config';
 
+// Importando o novo componente de criação
+import { CriarComponent } from './criar/criar';
+
 export const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'cadastro', component: CadastroComponent },
-
   { path: 'feed', component: FeedComponent },
   { path: 'procurar', component: ProcurarComponent },
   { path: 'procurar/lista', component: ProcurarListaComponent },
@@ -24,5 +25,9 @@ export const routes: Routes = [
   { path: 'conta', component: ContaComponent },
   { path: 'config', component: ConfigComponent },
 
+  // Rota para a tela de criar publicação
+  { path: 'criar', component: CriarComponent },
+
+  // Redireciona qualquer caminho desconhecido para o login
   { path: '**', redirectTo: '' },
 ];

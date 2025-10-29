@@ -3,7 +3,7 @@
   <main class="main">
     <div class="card" style="padding:16px;max-width:860px">
       <header class="acc-h">
-        <img [src]="usuario.foto" class="avatar-lg" alt="" onerror="this.onerror=null;this.src='/assets/prints/avatar.svg'">
+        <img [src]="usuario.foto" class="avatar-lg" alt="Foto de perfil" onerror="this.onerror=null;this.src='conta.jpeg'">
         <div class="grow">
           <nav class="tabs">
             <a class="active">Minha conta</a>
@@ -20,8 +20,8 @@
           <a class="chip" style="margin-left:auto">Upload ⬆</a>
         </div>
         <h2 style="margin-top:6px">{{ usuario.nome }}</h2>
-        <p class="muted">{{ usuario.status }}</p>
-
+        <p class="muted">Aniversário: {{ usuario.aniversario }}</p> <!-- Data de aniversário aqui -->
+        
         <div class="actions">
           <button class="chip">✏️ Editar perfil</button>
           <button class="chip">📷 Trocar foto de perfil</button>
