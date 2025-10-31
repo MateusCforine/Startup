@@ -17,14 +17,49 @@
         <div class="meta">
           <b>{{ usuario.amigos }}</b> Amigos
           <b>{{ usuario.posts }}</b> Sem posts ainda
-          <a class="chip" style="margin-left:auto">Upload ⬆</a>
+          <label class="chip" style="margin-left:auto; cursor:pointer">
+            Upload 📤
+            <input type="file" hidden (change)="trocarFoto($event.target)" />
+          </label>
         </div>
-        <h2 style="margin-top:6px">{{ usuario.nome }}</h2>
-        <p class="muted">Aniversário: {{ usuario.aniversario }}</p> <!-- Data de aniversário aqui -->
-        
-        <div class="actions">
-          <button class="chip">✏️ Editar perfil</button>
-          <button class="chip">📷 Trocar foto de perfil</button>
+
+        @if (!editando) {
+          <h2 style="margin-top:6px">{{ usuario.nome }}</h2>
+          <p class="muted">Aniversário: {{ usuario.aniversario }}</p>
+          <p class="muted">{{ usuario.status || 'Sem status' }}</p>
+          <div class="actions">
+            <button class="chip" (click)="editando = true">✏️ Editar perfil</button>
+          </div>
+        } @else {
+          <div class="form">
+            <label>Nome</label>
+            <input [(ngModel)]="usuario.nome" placeholder="Seu nome" />
+            <label>Status</label>
+            <input [(ngModel)]="usuario.status" placeholder="Escreva um status" />
+            <div class="actions">
+              <button class="chip" (click)="editando = false">Cancelar</button>
+              <button class="chip" (click)="salvar()">Salvar</button>
+            </div>
+          </div>
+        }
+
+        <div class="mt-16">
+          <h3>Seus posts ({{ usuario.posts }})</h3>
+          @if (!seusPosts.length) {
+            <p class="muted">Você ainda não publicou nada.</p>
+          } @else {
+            <div class="grid-posts">
+              @for (p of seusPosts; track $index) {
+                <figure class="post-thumb">
+                  <img [src]="p.img" alt="post" />
+                  <figcaption>
+                    <small>{{ p.tag }}</small>
+                    <b>{{ p.likes || 0 }} curtidas</b>
+                  </figcaption>
+                </figure>
+              }
+            </div>
+          }
         </div>
       </section>
     </div>

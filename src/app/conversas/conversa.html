@@ -2,10 +2,14 @@
   <app-menu></app-menu>
   <main class="main">
     <h2>Chats</h2>
+    <div class="toolbar">
+      <input [(ngModel)]="filtro" placeholder="Buscar conversas..." />
+      <button class="chip" (click)="marcarTodasLidas()">Marcar todas como lidas</button>
+    </div>
     <ul class="chat-list">
-      @for (c of chats; track $index) {
-        <li class="card chat-item">
-          <img [src]="c.img" alt="" class="avatar" onerror="this.onerror=null;this.src='avatar.svg'">
+      @for (c of filtradas; track $index) {
+        <li class="card chat-item" routerLink="/chat">
+          <img [src]="c.img" alt="" class="avatar" onerror="this.onerror=null;this.src='/avatar.png'">
           <div class="txt">
             <strong>{{ c.nome }}</strong>
             <span class="muted">{{ c.resumo }}</span>

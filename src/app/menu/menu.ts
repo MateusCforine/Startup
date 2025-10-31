@@ -9,4 +9,4 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   templateUrl: './menu.html',
   styleUrls: ['./menu.css']
 })
-export class MenuComponent {}  // <- ESTE Ã© o nome exportado
+export class MenuComponent {}  // <- ESTE é o nome exportado

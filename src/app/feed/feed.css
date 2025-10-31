@@ -147,3 +147,47 @@
   gap: 16px;
   margin-top: 16px;
 }
+
+/* --- Enhancements & interactions --- */
+.post.big .post-img { transition: transform .25s ease; }
+.post:hover .post-img { transform: scale(1.01); }
+
+.pill-btn, .icon-btn {
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 999px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: transform .12s ease, background .2s ease, color .2s ease, border-color .2s ease;
+}
+.pill-btn:hover, .icon-btn:hover { transform: translateY(-1px); }
+.pill-btn:active, .icon-btn:active { transform: translateY(0) scale(0.98); }
+.pill-btn.liked { background: #ffe8e7; border-color: #f5b0ae; }
+.icon-btn.active { background: #fff7cc; border-color: #ffe08a; }
+
+/* Skeleton loading */
+.skeleton { position: relative; overflow: hidden; }
+.skeleton .sk-avatar { width: 36px; height: 36px; border-radius: 50%; background: #eee; }
+.skeleton .sk-line { height: 14px; border-radius: 8px; background: #eee; flex:1; }
+.skeleton .sk-line.w80 { max-width: 160px; }
+.skeleton .sk-line.w60 { max-width: 120px; }
+.skeleton .sk-media { height: 320px; background: #eee; }
+.skeleton .sk-pill { width: 90px; height: 32px; border-radius: 999px; background: #eee; }
+.skeleton::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 1.4s infinite;
+}
+@keyframes shimmer { 100% { transform: translateX(100%); } }
+
+/* Scroll to top */
+.scroll-top {
+  position: fixed; right: 24px; bottom: 24px; width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border-radius: 999px; border: 1px solid var(--border); background: #fff;
+  box-shadow: var(--shadow); cursor: pointer;
+  transition: transform .15s ease, box-shadow .2s ease;
+}
+.scroll-top:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.12); }

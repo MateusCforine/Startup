@@ -2,8 +2,8 @@
   <app-menu></app-menu>
   <main class="main">
     <div class="searchbar">
-      <span>🔍</span>
-      <input [(ngModel)]="termo" name="q" placeholder='Procurar'>
+      <span>🔎</span>
+      <input [(ngModel)]="termo" name="q" placeholder="Procurar" (ngModelChange)="pesquisar()" (keyup.enter)="pesquisar()">
     </div>
 
     <h3 class="mt-16">Descubra</h3>
@@ -21,10 +21,33 @@
           <article class="s-card">
             <img [src]="s.img" alt="">
             <div class="meta">{{ s.meta }}</div>
-            <b>{{ s.titulo }} ✔</b>
+            <b>{{ s.titulo }} ⭐</b>
           </article>
         }
       </div>
     </div>
+
+    @if (termo.trim()) {
+      <div class="mt-16">
+        <div class="title-row" style="display:flex;align-items:center">
+          <h3>Resultados</h3>
+          @if (loading) { <small class="muted" style="margin-left:8px">buscando...</small> }
+        </div>
+        @if (!loading && !resultados.length) {
+          <p class="muted">Nenhum resultado para "{{ termo }}".</p>
+        } @else {
+          <div class="row-scroll">
+            @for (r of resultados; track $index) {
+              <article class="s-card">
+                <img [src]="r.img" alt="">
+                <div class="meta">{{ r.meta }}</div>
+                <b>{{ r.titulo }}</b>
+              </article>
+            }
+          </div>
+        }
+      </div>
+    }
   </main>
 </div>
+

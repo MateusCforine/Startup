@@ -2,9 +2,13 @@
   <app-menu></app-menu>
   <main class="main">
     <h2>Notificações</h2>
+    <div class="toolbar">
+      <button class="chip" (click)="marcarTodasLidas()">Marcar todas como lidas</button>
+      <button class="chip" (click)="limpar()">Limpar</button>
+    </div>
     <ul class="notif">
       @for (n of itens; track $index) {
-        <li class="card row">
+        <li class="card row" [class.lida]="n.lida">
           <img [src]="n.img" class="avatar" alt="" onerror="this.onerror=null;this.src='/assets/prints/avatar.svg'">
           <div class="col">
             <strong>{{ n.texto }}</strong>
@@ -17,3 +21,4 @@
     </ul>
   </main>
 </div>
+

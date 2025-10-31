@@ -1,19 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MenuComponent } from '../menu/menu';
 import { LikesPipe } from '../shared/likes.pipe';
 
 type Post = {
+  _id?: string;
   autor: string;
   tag: string;
   tempo: string;
   img: string;
   like: boolean;
+  bookmark?: boolean;
   likes: number;
   comments: number;
   commentsList?: string[];
-  // 🔽 campos para comentário
   showCommentBox?: boolean;
   newComment?: string;
 };
@@ -21,54 +23,152 @@ type Post = {
 @Component({
   selector: 'app-feed',
   standalone: true,
-  imports: [CommonModule, FormsModule, MenuComponent, LikesPipe],
+  imports: [CommonModule, FormsModule, HttpClientModule, MenuComponent, LikesPipe],
   templateUrl: './feed.html',
   styleUrls: ['./feed.css'],
 })
-export class FeedComponent {
+export class FeedComponent implements OnInit {
   stories = Array.from({ length: 9 }).map((_, i) => `story-${i + 1}`);
   avatar = '/avatar.png';
 
-  posts: Post[] = [
+  posts: Post[] = [];
+  loading = true;
+  private defaultPosts: Post[] = [
     {
       autor: 'Outback',
       tag: '#promo',
       tempo: '2 h',
-      img: 'Outback.jpeg',          // ou '/assets/prints/Outback.jpeg'
+      img: '/Outback.jpeg',
       like: false,
+      bookmark: false,
       likes: 53200,
-      comments: 168,
+      comments: 2,
       commentsList: ['Bora!', 'Quero muito provar.'],
     },
     {
       autor: 'Coco Bambu',
       tag: '#seafood',
       tempo: '3 h',
-      img: 'cocobambu.png',         // ou '/assets/prints/cocobambu.png'
+      img: '/cocobambu.png',
       like: false,
+      bookmark: false,
       likes: 27400,
-      comments: 89,
-      commentsList: ['Incrível!', 'Melhor camarão da cidade 😍'],
+      comments: 2,
+      commentsList: ['Incrível!', 'Melhor camarão da cidade'],
     },
   ];
+  private API = 'http://localhost:3001/api';
 
-  toggleLike(p: Post) {
-    p.like = !p.like;
-    p.likes += p.like ? 1 : -1;
+  constructor(private http: HttpClient) {}
+
+  ngOnInit(): void {
+    this.loadPosts();
   }
 
-  // 🔽 abre/fecha a caixinha de comentário
+  private loadPosts() {
+    this.http.get<any[]>(`${this.API}/posts`).subscribe({
+      next: (items) => {
+        this.posts = (items || []).map((p) => ({
+          _id: p._id,
+          autor: p.autor,
+          tag: p.tag,
+          tempo: p.tempo || 'agora',
+          img: p.img,
+          like: false,
+          bookmark: false,
+          likes: p.likes ?? 0,
+          comments: p.comments ?? 0,
+          commentsList: p.commentsList ?? [],
+        }));
+        if (!this.posts.length) {
+          this.posts = [...this.defaultPosts];
+        }
+        this.loading = false;
+      },
+      error: () => {
+        this.posts = [...this.defaultPosts];
+        this.loading = false;
+      },
+    });
+  }
+
+  toggleLike(p: Post) {
+    const newLike = !p.like;
+    const delta = newLike ? 1 : -1;
+    if (!p._id) {
+      p.like = newLike;
+      p.likes += delta;
+      return;
+    }
+    this.http.post<{ likes: number }>(`${this.API}/posts/${p._id}/like`, { delta }).subscribe({
+      next: (res) => {
+        p.like = newLike;
+        p.likes = res?.likes ?? p.likes + delta;
+      },
+      error: () => {
+        p.like = newLike;
+        p.likes += delta;
+      },
+    });
+  }
+
   toggleComments(p: Post) {
     p.showCommentBox = !p.showCommentBox;
   }
 
-  // 🔽 envia comentário (usa o campo newComment do próprio post)
   addComment(p: Post) {
     const txt = (p.newComment || '').trim();
     if (!txt) return;
-    if (!p.commentsList) p.commentsList = [];
-    p.commentsList.push(txt);
-    p.comments += 1;
-    p.newComment = '';
+    if (!p._id) {
+      if (!p.commentsList) p.commentsList = [];
+      p.commentsList.push(txt);
+      p.comments += 1;
+      p.newComment = '';
+      return;
+    }
+    this.http
+      .post<{ comments: number; commentsList: string[] }>(`${this.API}/posts/${p._id}/comments`, { text: txt })
+      .subscribe({
+        next: (res) => {
+          p.commentsList = res?.commentsList ?? [...(p.commentsList || []), txt];
+          p.comments = res?.comments ?? p.comments + 1;
+          p.newComment = '';
+        },
+        error: () => {
+          if (!p.commentsList) p.commentsList = [];
+          p.commentsList.push(txt);
+          p.comments += 1;
+          p.newComment = '';
+        },
+      });
+  }
+
+  toggleBookmark(p: Post) {
+    p.bookmark = !p.bookmark;
+  }
+
+  async copyLink(p: Post) {
+    try {
+      const base = window.location.origin;
+      const id = p._id || 'local';
+      const url = `${base}/feed#post-${id}`;
+      await navigator.clipboard.writeText(url);
+      alert('Link do post copiado!');
+    } catch {
+      alert('Não foi possível copiar o link.');
+    }
+  }
+
+  showScrollTop = false;
+  @HostListener('window:scroll') onScroll() {
+    this.showScrollTop = (window.scrollY || 0) > 300;
+  }
+
+  scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  isVideo(url: string): boolean {
+    return /\.(mp4|webm|ogg)$/i.test(url || '');
   }
 }

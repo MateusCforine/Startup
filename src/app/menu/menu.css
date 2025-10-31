@@ -34,21 +34,9 @@
   margin-top: 12px;
 }
 
-.links a {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  color: #fff; /* Cor das letras das opções da menu para branco */
-  text-decoration: none;
-  font-weight: 600;
-  opacity: 0.9;
-}
+.links a { display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;color:#fff;text-decoration:none;font-weight:600;opacity:.9;transition:transform .12s ease, background .2s ease, opacity .2s ease }
 
-.links a:hover {
-  opacity: 1;
-}
+.links a:hover { opacity:1; transform: translateX(2px) }
 
 .links a.active {
   background: rgba(255, 255, 255, 0.15);
@@ -60,6 +48,6 @@
   filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.3));
 }
 
-.links a {
-  font-size: 18px;
-}
+.links a { display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;color:#fff;text-decoration:none;font-weight:600;opacity:.9;transition:transform .12s ease, background .2s ease, opacity .2s ease }
+
+.badge{margin-left:auto;background:#fff;color:#e53935;border-radius:999px;padding:0 8px;font-size:12px;line-height:18px;height:18px}

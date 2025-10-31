@@ -8,7 +8,7 @@
         <button class="circle add">+</button>
         @for (s of stories; track $index) {
           <img class="circle" src="/avatar.png"
-               onerror="this.onerror=null;this.src='/assets/prints/avatar.svg'"
+               onerror="this.onerror=null;this.src='/avatar.png'"
                alt="story">
         }
         <span class="tag">Bombando hoje</span>
@@ -17,117 +17,108 @@
       <!-- Grid com posts à esquerda e People à direita -->
       <section class="grid highlight">
         <div class="posts-col">
-          <!-- 🥩 Post Outback -->
-          <article class="post big">
-            <header class="p-head">
-              <img class="circle" src="/avatar.png"
-                   onerror="this.onerror=null;this.src='/assets/prints/avatar.svg'" alt="autor">
-              <strong>{{ posts[0].autor }}</strong>
-              <span>{{ posts[0].tag }}</span>
-              <time> • {{ posts[0].tempo }}</time>
-            </header>
-
-            <div class="img-wrap">
-              <img class="post-img"
-                   loading="lazy"
-                   [src]="posts[0].img"
-                   onerror="this.onerror=null;this.src='/assets/prints/gusto.jpg'"
-                   alt="post outback">
-            </div>
-
-            <footer class="p-foot">
-              <button class="pill-btn" (click)="toggleLike(posts[0])">
-                {{ posts[0].like ? '❤ Curtido' : '♡ Curtir' }}
-              </button>
-              <button class="icon-btn" (click)="toggleComments(posts[0])">
-                💬 {{ posts[0].comments }} comentários
-              </button>
-              <span class="muted">{{ posts[0].likes | likes }} curtidas</span>
-            </footer>
-
-            @if (posts[0].showCommentBox) {
-              <div class="comment-box">
-                <input [(ngModel)]="posts[0].newComment" placeholder="Escreva um comentário..." />
-                <button class="pill-btn" (click)="addComment(posts[0])">Enviar</button>
+          @if (loading) {
+            <article class="post skeleton">
+              <div class="p-head">
+                <div class="sk-avatar"></div>
+                <div class="sk-line w80"></div>
               </div>
-            }
-
-            @if (posts[0].commentsList?.length) {
-              <ul>
-                @for (c of posts[0].commentsList; track $index) {
-                  <li>{{ c }}</li>
-                }
-              </ul>
-            }
-          </article>
-
-          <!-- 🍤 Post Coco Bambu -->
-          <article class="post big">
-            <header class="p-head">
-              <img class="circle" src="/avatar.png"
-                   onerror="this.onerror=null;this.src='/assets/prints/avatar.svg'" alt="autor">
-              <strong>{{ posts[1].autor }}</strong>
-              <span>{{ posts[1].tag }}</span>
-              <time> • {{ posts[1].tempo }}</time>
-            </header>
-
-            <div class="img-wrap">
-              <img class="post-img"
-                   loading="lazy"
-                   [src]="posts[1].img"
-                   onerror="this.onerror=null;this.src='/assets/prints/gusto.jpg'"
-                   alt="post coco bambu">
-            </div>
-
-            <footer class="p-foot">
-              <button class="pill-btn" (click)="toggleLike(posts[1])">
-                {{ posts[1].like ? '❤ Curtido' : '♡ Curtir' }}
-              </button>
-              <button class="icon-btn" (click)="toggleComments(posts[1])">
-                💬 {{ posts[1].comments }} comentários
-              </button>
-              <span class="muted">{{ posts[1].likes | likes }} curtidas</span>
-            </footer>
-
-            @if (posts[1].showCommentBox) {
-              <div class="comment-box">
-                <input [(ngModel)]="posts[1].newComment" placeholder="Escreva um comentário..." />
-                <button class="pill-btn" (click)="addComment(posts[1])">Enviar</button>
+              <div class="sk-media"></div>
+              <div class="p-foot">
+                <div class="sk-pill"></div>
+                <div class="sk-pill"></div>
               </div>
-            }
+            </article>
+            <article class="post skeleton">
+              <div class="p-head">
+                <div class="sk-avatar"></div>
+                <div class="sk-line w60"></div>
+              </div>
+              <div class="sk-media"></div>
+              <div class="p-foot">
+                <div class="sk-pill"></div>
+                <div class="sk-pill"></div>
+              </div>
+            </article>
+          } @else if (!posts.length) {
+            <p class="muted">Nenhum post encontrado.</p>
+          }
+          @for (p of posts; track p._id ?? $index) {
+            <article class="post big" [attr.id]="'post-' + (p._id || $index)">
+              <header class="p-head">
+                <img class="circle" src="/avatar.png"
+                     onerror="this.onerror=null;this.src='/avatar.png'" alt="autor">
+                <strong>{{ p.autor }}</strong>
+                <span>{{ p.tag }}</span>
+                <time> • {{ p.tempo }}</time>
+              </header>
 
-            @if (posts[1].commentsList?.length) {
-              <ul>
-                @for (c of posts[1].commentsList; track $index) {
-                  <li>{{ c }}</li>
+              <div class="img-wrap">
+                @if (isVideo(p.img)) {
+                  <video class="post-img" [src]="p.img" controls playsinline></video>
+                } @else {
+                  <img class="post-img"
+                       loading="lazy"
+                       [src]="p.img"
+                       onerror="this.onerror=null;this.src='/gusto.jpg'"
+                       alt="post image">
                 }
-              </ul>
-            }
-          </article>
+              </div>
+
+              <footer class="p-foot">
+                <button class="pill-btn" [class.liked]="p.like" (click)="toggleLike(p)">
+                  {{ p.like ? '✓ Curtido' : '♡ Curtir' }}
+                </button>
+                <button class="icon-btn" (click)="toggleComments(p)" title="Comentários">
+                  💬 {{ p.comments }} comentários
+                </button>
+                <button class="icon-btn" (click)="toggleBookmark(p)" [class.active]="p.bookmark" title="Salvar">
+                  {{ p.bookmark ? '★ Salvo' : '☆ Salvar' }}
+                </button>
+                <button class="icon-btn" (click)="copyLink(p)" title="Compartilhar">⤴ Compartilhar</button>
+                <span class="muted">{{ p.likes | likes }} curtidas</span>
+              </footer>
+
+              @if (p.showCommentBox) {
+                <div class="comment-box">
+                  <input [(ngModel)]="p.newComment" placeholder="Escreva um comentário..." (keyup.enter)="addComment(p)" />
+                  <button class="pill-btn" (click)="addComment(p)">Enviar</button>
+                </div>
+              }
+
+              @if (p.commentsList?.length) {
+                <ul>
+                  @for (c of p.commentsList; track $index) {
+                    <li>{{ c }}</li>
+                  }
+                </ul>
+              }
+            </article>
+          }
         </div>
 
         <!-- People -->
         <aside class="people">
-          <h3>People</h3>
+          <h3>Sugestões</h3>
           <div class="cards">
             <div class="card">
               <img src="/avatar.png"
-                   onerror="this.onerror=null;this.src='/assets/prints/avatar.svg'" alt="Mia">
+                   onerror="this.onerror=null;this.src='/avatar.png'" alt="Mia">
               <b>Mia</b><button>Seguir</button>
             </div>
             <div class="card">
               <img src="/avatar.png"
-                   onerror="this.onerror=null;this.src='/assets/prints/avatar.svg'" alt="Elina">
+                   onerror="this.onerror=null;this.src='/avatar.png'" alt="Elina">
               <b>Elina</b><button>Seguir</button>
             </div>
             <div class="card">
               <img src="/avatar.png"
-                   onerror="this.onerror=null;this.src='/assets/prints/avatar.svg'" alt="John">
+                   onerror="this.onerror=null;this.src='/avatar.png'" alt="John">
               <b>John</b><button>Seguir</button>
             </div>
             <div class="card">
               <img src="/avatar.png"
-                   onerror="this.onerror=null;this.src='/assets/prints/avatar.svg'" alt="David">
+                   onerror="this.onerror=null;this.src='/avatar.png'" alt="David">
               <b>David</b><button>Seguir</button>
             </div>
           </div>
@@ -135,4 +126,8 @@
       </section>
     </div>
   </main>
+  
+  @if (showScrollTop) {
+    <button class="scroll-top" (click)="scrollToTop()" title="Voltar ao topo">↑</button>
+  }
 </div>

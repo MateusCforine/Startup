@@ -58,7 +58,8 @@
       <div class="actions">
         <button type="button" class="btn ghost" (click)="limpar()">Cancelar</button>
         <button type="submit" class="btn primary"
-                [disabled]="!descricao?.trim() || !previewUrl">
+                (click)="publicar()"
+                [disabled]="!descricao.trim() && !previewUrl">
           Publicar
         </button>
       </div>
