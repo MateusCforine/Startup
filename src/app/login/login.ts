@@ -19,7 +19,9 @@ export class LoginComponent {
   mostrarSenha = false;
 
   recuperando = false;
+  modoRecuperacao: 'email' | 'celular' = 'email';
   emailRecuperacao = '';
+  celularRecuperacao = '';
 
   constructor(
     private authService: AuthService,
@@ -53,24 +55,47 @@ export class LoginComponent {
     });
   }
 
+  // Abrir recuperação por e-mail (senha)
   esqueciSenha() {
     this.recuperando = true;
+    this.modoRecuperacao = 'email';
     this.emailRecuperacao = this.email;
+    this.celularRecuperacao = '';
+  }
+
+  // Abrir recuperação por celular (caso esqueceu e-mail)
+  esqueciEmail() {
+    this.recuperando = true;
+    this.modoRecuperacao = 'celular';
+    this.celularRecuperacao = '';
   }
 
   enviarRecuperacao() {
-    if (
-      !this.emailRecuperacao ||
-      !this.emailRecuperacao.includes('@') ||
-      !this.emailRecuperacao.includes('.')
-    ) {
-      alert('Digite um e-mail de recuperação válido.');
-      return;
+    if (this.modoRecuperacao === 'email') {
+      if (
+        !this.emailRecuperacao ||
+        !this.emailRecuperacao.includes('@') ||
+        !this.emailRecuperacao.includes('.')
+      ) {
+        alert('Digite um e-mail de recuperação válido.');
+        return;
+      }
+
+      alert(
+        `Link de recuperação enviado para o e-mail: ${this.emailRecuperacao}`
+      );
+    } else {
+      const soDigitos = this.celularRecuperacao.replace(/\D/g, '');
+      if (soDigitos.length < 10) {
+        alert('Digite um número de celular válido com DDD.');
+        return;
+      }
+
+      alert(
+        `Código de recuperação enviado para o celular: ${this.celularRecuperacao}`
+      );
     }
 
-    alert(
-      `Se este fosse o sistema real, enviaríamos um link de recuperação para: ${this.emailRecuperacao}`
-    );
     this.recuperando = false;
   }
 

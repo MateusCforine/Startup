@@ -1,7 +1,7 @@
 <div class="page">
   <header class="topbar">
     <div class="links">
-      <span>Português(BR) ▾</span>
+      <span>Português (BR) ▾</span>
       <a>Sobre nós</a>
       <a>Termos e condições</a>
       <a>Política de privacidade</a>
@@ -19,6 +19,7 @@
 
     <section class="card">
       <form class="form" (submit)="$event.preventDefault()">
+        <!-- Campos de login -->
         <label class="field">
           <input
             type="email"
@@ -46,7 +47,7 @@
         </label>
 
         @if (!valido) {
-          <p class="hint">Preencha e-mail válido e senha (mín. 4).</p>
+          <p class="hint">Preencha e-mail válido e senha (mín. 4 caracteres).</p>
         }
 
         <button
@@ -68,30 +69,55 @@
           Criar nova conta
         </button>
 
-        <!-- Botão Esqueci minha senha (mesmo tamanho do Criar nova conta) -->
-        <button
-          class="secondary"
-          type="button"
-          (click)="esqueciSenha()"
-          style="margin-top: 10px;"
-        >
-          Esqueci minha senha
-        </button>
+        <!-- Botões lado a lado -->
+        <div class="recover-buttons">
+          <button
+            class="secondary"
+            type="button"
+            (click)="esqueciSenha()"
+          >
+            Esqueci minha senha
+          </button>
 
-        <!-- Campo que aparece para digitar o e-mail de recuperação -->
+          <button
+            class="secondary"
+            type="button"
+            (click)="esqueciEmail()"
+          >
+            Esqueci meu e-mail
+          </button>
+        </div>
+
+        <!-- Bloco de recuperação -->
         @if (recuperando) {
           <div class="recover-box">
-            <p class="hint">
-              Informe o e-mail para receber o link de recuperação:
-            </p>
-            <label class="field">
-              <input
-                type="email"
-                placeholder="E-mail de recuperação"
-                [(ngModel)]="emailRecuperacao"
-                name="emailRecuperacao"
-              />
-            </label>
+            @if (modoRecuperacao === 'email') {
+              <p class="hint">
+                Informe o e-mail para receber o link de recuperação:
+              </p>
+
+              <label class="field recover-field">
+                <input
+                  type="email"
+                  placeholder="E-mail de recuperação"
+                  [(ngModel)]="emailRecuperacao"
+                  name="emailRecuperacao"
+                />
+              </label>
+            } @else {
+              <p class="hint">
+                Informe o número de celular cadastrado para recuperar o acesso:
+              </p>
+
+              <label class="field recover-field">
+                <input
+                  type="tel"
+                  placeholder="Celular com DDD (ex: 15 99999-9999)"
+                  [(ngModel)]="celularRecuperacao"
+                  name="celularRecuperacao"
+                />
+              </label>
+            }
 
             <button
               class="primary"
