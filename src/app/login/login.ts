@@ -18,39 +18,45 @@ export class LoginComponent {
   senha = '';
   mostrarSenha = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-  get valido() {
-    return this.email.includes('@') && this.senha.length >= 4;
+  get valido(): boolean {
+    const emailOk =
+      this.email.includes('@') &&
+      this.email.includes('.') &&
+      this.email.length >= 5;
+
+    const senhaOk = this.senha.length >= 4;
+
+    return emailOk && senhaOk;
   }
 
   entrar() {
-    // Prefer backend login (checks email+senha). If backend is unreachable, fallback to localStorage simulation.
+    if (!this.valido) {
+      return;
+    }
+
     this.authService.login(this.email, this.senha).subscribe({
       next: (res) => {
         if (res.success) {
-          alert(`Login de: ${this.email}`);
+          alert('Login realizado com sucesso!');
           this.router.navigate(['/feed']);
         } else {
-          alert('Credenciais inválidas.');
+          alert(res.message || 'E-mail ou senha inválidos.');
         }
       },
-      error: (err) => {
-        // fallback simulation: check localStorage 'sim_users'
-        try {
-          const users = JSON.parse(localStorage.getItem('sim_users') || '[]');
-          const ok = users.some((u: any) => u.email === this.email && u.password === this.senha);
-          if (ok) {
-            alert('Login (simulado) bem-sucedido');
-            this.router.navigate(['/feed']);
-            return;
-          }
-        } catch (e) {
-          // ignore
-        }
+      error: () => {
         alert('Erro ao verificar usuário (e simulação falhou).');
       }
     });
+  }
+
+  esqueciSenha() {
+    // Aqui você pode depois redirecionar para uma tela de recuperação de senha
+    alert('Funcionalidade de recuperação de senha ainda não está disponível.');
   }
 
   goCadastro() {

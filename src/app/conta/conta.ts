@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MenuComponent } from '../menu/menu';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-conta',
@@ -25,6 +26,20 @@ export class ContaComponent implements OnInit {
   seusPosts: Array<{ img: string; autor: string; tag?: string; likes?: number }> = [];
   private API = 'http://localhost:3001/api';
 
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {
+    try {
+      const raw = localStorage.getItem('perfil_usuario');
+      if (raw) this.usuario = { ...this.usuario, ...JSON.parse(raw) };
+    } catch {}
+  }
+
+  ngOnInit(): void {
+    this.carregarSeusPosts();
+  }
+
   salvar() {
     localStorage.setItem('perfil_usuario', JSON.stringify(this.usuario));
     this.editando = false;
@@ -37,30 +52,31 @@ export class ContaComponent implements OnInit {
     this.usuario.foto = url;
   }
 
-  constructor(private http: HttpClient) {
-    try {
-      const raw = localStorage.getItem('perfil_usuario');
-      if (raw) this.usuario = { ...this.usuario, ...JSON.parse(raw) };
-    } catch {}
-  }
-
-  ngOnInit(): void {
-    this.carregarSeusPosts();
-  }
-
   private carregarSeusPosts() {
     const nome = this.usuario.nome;
     this.seusPosts = [];
-    // Busca por termo e filtra autor exato
+
     this.http
       .get<any[]>(`${this.API}/posts`, { params: { q: nome } })
       .subscribe({
         next: (items: any[]) => {
           const arr = (items || []).filter((p: any) => p.autor === nome);
-          this.seusPosts = arr.map((p: any) => ({ img: p.img, autor: p.autor, tag: p.tag, likes: p.likes }));
+          this.seusPosts = arr.map((p: any) => ({
+            img: p.img,
+            autor: p.autor,
+            tag: p.tag,
+            likes: p.likes
+          }));
           this.usuario.posts = this.seusPosts.length;
         },
         error: () => {},
       });
+  }
+
+  sair() {
+    // Se sua rota de login for '', isso te leva pra tela de login
+    this.router.navigate(['/']);
+    // Se for '/login', use:
+    // this.router.navigate(['/login']);
   }
 }
