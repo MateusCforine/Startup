@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../auth.service';
-import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +18,9 @@ export class LoginComponent {
   senha = '';
   mostrarSenha = false;
 
+  recuperando = false;
+  emailRecuperacao = '';
+
   constructor(
     private authService: AuthService,
     private router: Router
@@ -28,16 +31,12 @@ export class LoginComponent {
       this.email.includes('@') &&
       this.email.includes('.') &&
       this.email.length >= 5;
-
     const senhaOk = this.senha.length >= 4;
-
     return emailOk && senhaOk;
   }
 
   entrar() {
-    if (!this.valido) {
-      return;
-    }
+    if (!this.valido) return;
 
     this.authService.login(this.email, this.senha).subscribe({
       next: (res) => {
@@ -49,14 +48,30 @@ export class LoginComponent {
         }
       },
       error: () => {
-        alert('Erro ao verificar usuário (e simulação falhou).');
+        alert('Erro ao verificar usuário.');
       }
     });
   }
 
   esqueciSenha() {
-    // Aqui você pode depois redirecionar para uma tela de recuperação de senha
-    alert('Funcionalidade de recuperação de senha ainda não está disponível.');
+    this.recuperando = true;
+    this.emailRecuperacao = this.email;
+  }
+
+  enviarRecuperacao() {
+    if (
+      !this.emailRecuperacao ||
+      !this.emailRecuperacao.includes('@') ||
+      !this.emailRecuperacao.includes('.')
+    ) {
+      alert('Digite um e-mail de recuperação válido.');
+      return;
+    }
+
+    alert(
+      `Se este fosse o sistema real, enviaríamos um link de recuperação para: ${this.emailRecuperacao}`
+    );
+    this.recuperando = false;
   }
 
   goCadastro() {

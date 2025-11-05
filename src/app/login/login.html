@@ -58,16 +58,6 @@
           Entrar
         </button>
 
-        <div class="aux">
-          <button
-            class="link"
-            type="button"
-            (click)="esqueciSenha()"
-          >
-            Esqueci minha senha
-          </button>
-        </div>
-
         <div class="or">Ou</div>
 
         <button
@@ -77,6 +67,41 @@
         >
           Criar nova conta
         </button>
+
+        <!-- Botão Esqueci minha senha (mesmo tamanho do Criar nova conta) -->
+        <button
+          class="secondary"
+          type="button"
+          (click)="esqueciSenha()"
+          style="margin-top: 10px;"
+        >
+          Esqueci minha senha
+        </button>
+
+        <!-- Campo que aparece para digitar o e-mail de recuperação -->
+        @if (recuperando) {
+          <div class="recover-box">
+            <p class="hint">
+              Informe o e-mail para receber o link de recuperação:
+            </p>
+            <label class="field">
+              <input
+                type="email"
+                placeholder="E-mail de recuperação"
+                [(ngModel)]="emailRecuperacao"
+                name="emailRecuperacao"
+              />
+            </label>
+
+            <button
+              class="primary"
+              type="button"
+              (click)="enviarRecuperacao()"
+            >
+              Enviar link de recuperação
+            </button>
+          </div>
+        }
       </form>
     </section>
   </main>
