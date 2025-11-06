@@ -8,37 +8,45 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [FormsModule],
   templateUrl: './cadastro.html',
-  styleUrls: ['./cadastro.css']
+  styleUrls: ['./cadastro.css'],
 })
 export class CadastroComponent {
-  email = ''; telefone = ''; senha = ''; confirma = '';
-  mostrar1 = false; mostrar2 = false;
+  email = '';
+  telefone = '';
+  senha = '';
+  confirma = '';
+  mostrar1 = false;
+  mostrar2 = false;
 
   constructor(private auth: AuthService, private router: Router) {}
 
-  get ok() {
-    return this.email.includes('@') &&
-           this.telefone.length >= 8 &&
-           this.senha.length >= 4 &&
-           this.senha === this.confirma;
+  get ok(): boolean {
+    return (
+      this.email.includes('@') &&
+      this.telefone.length >= 8 &&
+      this.senha.length >= 4 &&
+      this.senha === this.confirma
+    );
   }
 
-  async criarConta() {
+  criarConta() {
     if (!this.ok) return;
-    this.auth.register({ email: this.email, password: this.senha, telefone: this.telefone })
+    this.auth
+      .register({ email: this.email, password: this.senha, telefone: this.telefone })
       .subscribe({
         next: (res) => {
           if (res.success) {
             alert('Conta criada com sucesso!');
             this.router.navigate(['/feed']);
           } else {
-            alert('Erro: ' + (res.message || 'Não foi possível criar a conta.'));
+            alert(res.message || 'Nao foi possivel criar a conta.');
           }
         },
         error: (err) => {
           console.error(err);
-          alert('Erro ao criar conta. Tente novamente.');
-        }
+          const message = err?.error?.message || 'Erro ao criar conta. Tente novamente.';
+          alert(message);
+        },
       });
   }
 }

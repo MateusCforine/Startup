@@ -8,15 +8,17 @@ const fs = require('fs');
 const app = express();
 app.use(express.json());
 app.use(cors());
-// Ensure uploads dir exists and serve static files
+
 const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
 app.use('/uploads', express.static(uploadsDir));
 
-mongoose.connect('mongodb://localhost:27017/startup', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose
+  .connect('mongodb://localhost:27017/startup')
+  .then(() => console.log('Conectado ao MongoDB em mongodb://localhost:27017/startup'))
+  .catch((err) => console.error('Erro ao conectar ao MongoDB:', err));
 
 const userSchema = new mongoose.Schema({
   email: String,
@@ -26,7 +28,6 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-// Post schema/model for Feed
 const postSchema = new mongoose.Schema(
   {
     autor: String,
@@ -41,18 +42,12 @@ const postSchema = new mongoose.Schema(
 
 const Post = mongoose.model('Post', postSchema);
 
-// Endpoint para verificar se o usuário existe
 app.post('/api/check-user', async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
-  if (user) {
-    res.json({ exists: true });
-  } else {
-    res.json({ exists: false });
-  }
+  res.json({ exists: Boolean(user) });
 });
 
-// Endpoint para registrar novo usuário
 app.post('/api/register', async (req, res) => {
   try {
     const { email, password, telefone } = req.body;
@@ -74,11 +69,12 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-// Endpoint para login (verifica email + senha)
 app.post('/api/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    if (!email || !password) return res.status(400).json({ success: false, message: 'E-mail e senha são necessários.' });
+    if (!email || !password) {
+      return res.status(400).json({ success: false, message: 'E-mail e senha são necessários.' });
+    }
 
     const user = await User.findOne({ email, password });
     if (user) {
@@ -91,7 +87,6 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Seed a couple of posts if collection is empty
 async function seedPosts() {
   const count = await Post.countDocuments();
   if (count === 0) {
@@ -108,7 +103,7 @@ async function seedPosts() {
         tag: '#seafood',
         img: '/cocobambu.png',
         likes: 27400,
-        comments: ['Incrivel!', 'Melhor camarao da cidade'],
+        comments: ['Incrível!', 'Melhor camarão da cidade'],
       },
       {
         autor: 'Corbucci',
@@ -129,8 +124,6 @@ async function seedPosts() {
   }
 }
 
-// Feed endpoints
-// GET all posts (optional search with ?q=)
 app.get('/api/posts', async (req, res) => {
   try {
     const { q } = req.query;
@@ -161,7 +154,6 @@ app.get('/api/posts', async (req, res) => {
   }
 });
 
-// POST create a new post
 app.post('/api/posts', async (req, res) => {
   try {
     const { autor, tag, img } = req.body;
@@ -173,20 +165,21 @@ app.post('/api/posts', async (req, res) => {
   }
 });
 
-// POST like/unlike with delta
 app.post('/api/posts/:id/like', async (req, res) => {
   try {
     const { id } = req.params;
-    const { delta } = req.body; // +1 or -1
+    const { delta } = req.body;
     if (![1, -1].includes(Number(delta))) {
-      return res.status(400).json({ message: 'delta invalido' });
+      return res.status(400).json({ message: 'delta inválido' });
     }
     const updated = await Post.findByIdAndUpdate(
       id,
       { $inc: { likes: Number(delta) } },
       { new: true }
     );
-    if (!updated) return res.status(404).json({ message: 'Post nao encontrado.' });
+    if (!updated) {
+      return res.status(404).json({ message: 'Post não encontrado.' });
+    }
     res.json({ likes: updated.likes });
   } catch (err) {
     console.error('Erro ao atualizar like:', err);
@@ -194,41 +187,42 @@ app.post('/api/posts/:id/like', async (req, res) => {
   }
 });
 
-// POST add a comment
 app.post('/api/posts/:id/comments', async (req, res) => {
   try {
     const { id } = req.params;
     const { text } = req.body;
     if (!text || !String(text).trim()) {
-      return res.status(400).json({ message: 'Comentario vazio.' });
+      return res.status(400).json({ message: 'Comentário vazio.' });
     }
     const updated = await Post.findByIdAndUpdate(
       id,
       { $push: { comments: String(text).trim() } },
       { new: true }
     );
-    if (!updated) return res.status(404).json({ message: 'Post nao encontrado.' });
+    if (!updated) {
+      return res.status(404).json({ message: 'Post não encontrado.' });
+    }
     res.json({ comments: updated.comments.length, commentsList: updated.comments });
   } catch (err) {
-    console.error('Erro ao adicionar comentario:', err);
+    console.error('Erro ao adicionar comentário:', err);
     res.status(500).json({ message: 'Erro interno.' });
   }
 });
 
-// Upload endpoint (images/videos)
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination(req, file, cb) {
     cb(null, uploadsDir);
   },
-  filename: function (req, file, cb) {
+  filename(req, file, cb) {
     const ext = path.extname(file.originalname) || '';
     const base = path.basename(file.originalname, ext).replace(/[^a-z0-9_-]/gi, '_');
     cb(null, `${Date.now()}_${base}${ext}`);
   },
 });
+
 const upload = multer({
   storage,
-  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
+  limits: { fileSize: 20 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const ok = /^(image|video)\//.test(file.mimetype);
     cb(ok ? null : new Error('Tipo de arquivo não suportado'), ok);
@@ -237,9 +231,10 @@ const upload = multer({
 
 app.post('/api/upload', upload.single('file'), (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ message: 'Arquivo ausente' });
+    if (!req.file) {
+      return res.status(400).json({ message: 'Arquivo ausente' });
+    }
     const url = `/uploads/${req.file.filename}`;
-    // Return absolute URL for convenience
     const absolute = `${req.protocol}://${req.get('host')}${url}`;
     res.json({ url: absolute, path: url });
   } catch (e) {
@@ -249,6 +244,7 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
 });
 
 const PORT = 3001;
+console.log('Iniciando servidor Express...');
 app.listen(PORT, async () => {
   await seedPosts();
   console.log(`Server running on port ${PORT}`);

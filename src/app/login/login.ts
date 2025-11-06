@@ -8,11 +8,11 @@ import { AuthService } from '../auth.service';
   standalone: true,
   imports: [FormsModule],
   templateUrl: './login.html',
-  styleUrls: ['./login.css']
+  styleUrls: ['./login.css'],
 })
 export class LoginComponent {
   titulo = 'Onde o sabor\nune pessoas';
-  subtitulo = 'Aproveite seu tempo livre com nós';
+  subtitulo = 'Aproveite seu tempo livre com nos';
 
   email = '';
   senha = '';
@@ -23,10 +23,7 @@ export class LoginComponent {
   emailRecuperacao = '';
   celularRecuperacao = '';
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   get valido(): boolean {
     const emailOk =
@@ -41,21 +38,18 @@ export class LoginComponent {
     if (!this.valido) return;
 
     this.authService.login(this.email, this.senha).subscribe({
-      next: (res) => {
-        if (res.success) {
-          alert('Login realizado com sucesso!');
-          this.router.navigate(['/feed']);
-        } else {
-          alert(res.message || 'E-mail ou senha inválidos.');
-        }
+      next: () => {
+        alert('Login realizado com sucesso!');
+        this.router.navigate(['/feed']);
       },
-      error: () => {
-        alert('Erro ao verificar usuário.');
-      }
+      error: (err) => {
+        const message = err?.error?.message || 'E-mail ou senha invalidos.';
+        alert(message);
+      },
     });
   }
 
-  // Abrir recuperação por e-mail (senha)
+  // Abrir fluxo de recuperacao por e-mail (senha)
   esqueciSenha() {
     this.recuperando = true;
     this.modoRecuperacao = 'email';
@@ -63,7 +57,7 @@ export class LoginComponent {
     this.celularRecuperacao = '';
   }
 
-  // Abrir recuperação por celular (caso esqueceu e-mail)
+  // Abrir fluxo de recuperacao por celular (caso esqueceu e-mail)
   esqueciEmail() {
     this.recuperando = true;
     this.modoRecuperacao = 'celular';
@@ -77,23 +71,19 @@ export class LoginComponent {
         !this.emailRecuperacao.includes('@') ||
         !this.emailRecuperacao.includes('.')
       ) {
-        alert('Digite um e-mail de recuperação válido.');
+        alert('Digite um e-mail de recuperacao valido.');
         return;
       }
 
-      alert(
-        `Link de recuperação enviado para o e-mail: ${this.emailRecuperacao}`
-      );
+      alert(`Link de recuperacao enviado para o e-mail: ${this.emailRecuperacao}`);
     } else {
       const soDigitos = this.celularRecuperacao.replace(/\D/g, '');
       if (soDigitos.length < 10) {
-        alert('Digite um número de celular válido com DDD.');
+        alert('Digite um numero de celular valido com DDD.');
         return;
       }
 
-      alert(
-        `Código de recuperação enviado para o celular: ${this.celularRecuperacao}`
-      );
+      alert(`Codigo de recuperacao enviado para o celular: ${this.celularRecuperacao}`);
     }
 
     this.recuperando = false;
