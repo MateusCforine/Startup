@@ -50,13 +50,37 @@
             </div>
           } @else {
             <div class="form">
-              <label>Nome</label>
-              <input [(ngModel)]="usuario.nome" placeholder="Seu nome" />
-              <label>Status</label>
-              <input
-                [(ngModel)]="usuario.status"
-                placeholder="Escreva um status"
-              />
+              <label for="campo-nome">Nome</label>
+              <div class="form-row">
+                <input
+                  id="campo-nome"
+                  [(ngModel)]="usuario.nome"
+                  placeholder="Seu nome"
+                />
+                <button
+                  type="button"
+                  class="chip"
+                  (click)="confirmarNome()"
+                >
+                  Confirmar nome
+                </button>
+              </div>
+
+              <label for="campo-descricao">Descricao</label>
+              <div class="form-row">
+                <input
+                  id="campo-descricao"
+                  [(ngModel)]="usuario.status"
+                  placeholder="Escreva uma descricao"
+                />
+                <button
+                  type="button"
+                  class="chip"
+                  (click)="confirmarDescricao()"
+                >
+                  Confirmar descricao
+                </button>
+              </div>
               <div class="actions">
                 <button class="chip" (click)="editando = false">
                   Cancelar

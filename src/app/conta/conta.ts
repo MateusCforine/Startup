@@ -41,9 +41,27 @@ export class ContaComponent implements OnInit {
   }
 
   salvar() {
+    this.persistPerfil();
     this.showAutoDismissNotice('Perfil atualizado!');
-    localStorage.setItem('perfil_usuario', JSON.stringify(this.usuario));
     this.editando = false;
+  }
+
+  confirmarNome() {
+    const nome = (this.usuario.nome || '').trim();
+    if (!nome) {
+      this.showAutoDismissNotice('Aviso: informe um nome antes de confirmar.');
+      return;
+    }
+    this.usuario.nome = nome;
+    this.persistPerfil();
+    this.showAutoDismissNotice('Aviso: nome atualizado!');
+  }
+
+  confirmarDescricao() {
+    const descricao = (this.usuario.status || '').trim();
+    this.usuario.status = descricao;
+    this.persistPerfil();
+    this.showAutoDismissNotice(descricao ? 'Aviso: descricao atualizada!' : 'Aviso: descricao removida!');
   }
 
   trocarFoto(input: HTMLInputElement) {
@@ -79,6 +97,12 @@ export class ContaComponent implements OnInit {
     this.router.navigate(['/']);
     // Se for '/login', use:
     // this.router.navigate(['/login']);
+  }
+
+  private persistPerfil() {
+    try {
+      localStorage.setItem('perfil_usuario', JSON.stringify(this.usuario));
+    } catch {}
   }
 
   private showAutoDismissNotice(message: string) {
