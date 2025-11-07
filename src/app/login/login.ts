@@ -39,7 +39,7 @@ export class LoginComponent {
 
     this.authService.login(this.email, this.senha).subscribe({
       next: () => {
-        alert('Login realizado com sucesso!');
+        this.showAutoDismissNotice('Login realizado com sucesso!');
         this.router.navigate(['/feed']);
       },
       error: (err) => {
@@ -47,6 +47,38 @@ export class LoginComponent {
         alert(message);
       },
     });
+  }
+
+  private showAutoDismissNotice(message: string) {
+    if (typeof document === 'undefined') {
+      console.log(message);
+      return;
+    }
+
+    const toast = document.createElement('div');
+    toast.textContent = message;
+    toast.style.position = 'fixed';
+    toast.style.top = '16px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%)';
+    toast.style.padding = '12px 20px';
+    toast.style.background = '#323232';
+    toast.style.color = '#fff';
+    toast.style.borderRadius = '6px';
+    toast.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
+    toast.style.opacity = '0';
+    toast.style.transition = 'opacity 0.3s ease';
+    toast.style.zIndex = '1000';
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(() => {
+      toast.style.opacity = '1';
+    });
+
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      setTimeout(() => toast.remove(), 300);
+    }, 2500);
   }
 
   // Abrir fluxo de recuperacao por e-mail (senha)

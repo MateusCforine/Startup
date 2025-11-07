@@ -153,9 +153,9 @@ export class FeedComponent implements OnInit {
       const id = p._id || 'local';
       const url = `${base}/feed#post-${id}`;
       await navigator.clipboard.writeText(url);
-      alert('Link do post copiado!');
+      this.showAutoDismissNotice('Link do post copiado!');
     } catch {
-      alert('Não foi possível copiar o link.');
+      this.showAutoDismissNotice('Nao foi possivel copiar o link.', 'error');
     }
   }
 
@@ -170,5 +170,37 @@ export class FeedComponent implements OnInit {
 
   isVideo(url: string): boolean {
     return /\.(mp4|webm|ogg)$/i.test(url || '');
+  }
+
+  private showAutoDismissNotice(message: string, type: 'info' | 'error' = 'info') {
+    if (typeof document === 'undefined') {
+      console.log(message);
+      return;
+    }
+
+    const toast = document.createElement('div');
+    toast.textContent = message;
+    toast.style.position = 'fixed';
+    toast.style.top = '16px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%)';
+    toast.style.padding = '12px 20px';
+    toast.style.background = type === 'error' ? '#b00020' : '#323232';
+    toast.style.color = '#fff';
+    toast.style.borderRadius = '6px';
+    toast.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
+    toast.style.opacity = '0';
+    toast.style.transition = 'opacity 0.3s ease';
+    toast.style.zIndex = '1000';
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(() => {
+      toast.style.opacity = '1';
+    });
+
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      setTimeout(() => toast.remove(), 300);
+    }, 2500);
   }
 }

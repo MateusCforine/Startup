@@ -41,6 +41,7 @@ export class ContaComponent implements OnInit {
   }
 
   salvar() {
+    this.showAutoDismissNotice('Perfil atualizado!');
     localStorage.setItem('perfil_usuario', JSON.stringify(this.usuario));
     this.editando = false;
   }
@@ -74,9 +75,41 @@ export class ContaComponent implements OnInit {
   }
 
   sair() {
-    // Se sua rota de login for '', isso te leva pra tela de login
+    this.showAutoDismissNotice('Voce saiu da conta.');
     this.router.navigate(['/']);
     // Se for '/login', use:
     // this.router.navigate(['/login']);
+  }
+
+  private showAutoDismissNotice(message: string) {
+    if (typeof document === 'undefined') {
+      console.log(message);
+      return;
+    }
+
+    const toast = document.createElement('div');
+    toast.textContent = message;
+    toast.style.position = 'fixed';
+    toast.style.top = '16px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%)';
+    toast.style.padding = '12px 20px';
+    toast.style.background = '#323232';
+    toast.style.color = '#fff';
+    toast.style.borderRadius = '6px';
+    toast.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
+    toast.style.opacity = '0';
+    toast.style.transition = 'opacity 0.3s ease';
+    toast.style.zIndex = '1000';
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(() => {
+      toast.style.opacity = '1';
+    });
+
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      setTimeout(() => toast.remove(), 300);
+    }, 2500);
   }
 }
